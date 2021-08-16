@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'products',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -105,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 
@@ -126,3 +127,6 @@ STATICFILES_DIRS = (
 
 MEDIA_URL = '/media/'                            # для работы с медиафайлами которые будем загружать (товары и т.д)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')    # для работы с медиафайлами которые будем загружать  (товары и т.д)
+
+AUTH_USER_MODEL = 'users.User' # после создания class User(AbstractUser): вносим изменения здесь и применяем миграции
+                               #  в файле минраций в моделе пользователя (стандартной из коробки) появиться поле image = models.ImageField(upload_to='users_images', blank=True)

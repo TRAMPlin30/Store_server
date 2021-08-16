@@ -32,23 +32,29 @@
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'products:index' %}">Каталог <i class="fas fa-shopping-bag"></i> </a>
                 </li>
-                <!-- {% url 'products:index' %} пространство имен приложение products, в этой папке файл urls.py и в нем уже путь index указівающий на функцию отображения def products(request): в файле views.py приложения products-->
-                <li class="nav-item">
-                    <a class="nav-link" href="auth/login.html">Войти <i class="fas fa-sign-in-alt"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="auth/profile.html">Валерий П.
-                        <i class="fas fa-user-circle"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Выйти <i class="fas fa-sign-out-alt"></i></a>
-                </li>
+                <!-- {% url 'users:login' %} пространство имен приложение users, в этой папке файл urls.py и в нем уже путь login указівающий на функцию отображения def login(request): в файле views.py приложения users-->
+
+                {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:profile' %}"> {{ user }}
+                                <i class="fas fa-user-circle"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:logout' %}">Выйти <i class="fas fa-sign-out-alt"></i></a>
+                        </li>
+                {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:login' %}">Войти <i class="fas fa-sign-in-alt"></i></a>
+                        </li>
+                {% endif %}
+
             </ul>
         </div>
     </div>
