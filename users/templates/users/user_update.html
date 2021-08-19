@@ -1,0 +1,34 @@
+{% extends 'products/base.html' %}
+{% load staticfiles %}
+
+{% block css %}
+    <link href="{% static 'css/index.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+<!-- Page Content -->
+        <main>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-7">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert"
+                             style="margin-top: 50px; text-align: center;">
+                            <strong>Поздравляем!</strong>
+                            <strong>Информация успешно обновлена.</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+
+                            <p><a href="{% url 'users:profile'%}">click here --> Вернуться в личный кабинет</a></p>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+{% endblock content %}
+
