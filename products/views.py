@@ -1,6 +1,6 @@
-from django.shortcuts import render
-from products.models import Product, ProductCategory
-
+from django.shortcuts import render, HttpResponseRedirect
+from products.models import Product, ProductCategory, Basket
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -16,7 +16,33 @@ def products(request):
     }
     return render(request, "products/products.html", context)
 
+@login_required(login_url='/users/login/') # декор закрывающий возможность использования функции basket_add без входа под своим логином login_url='/users/login/' - страница на которую перенаправляеться пользователь при попытке использования basket_add
+def basket_add(request, product_id):
+    current_page = request.META.get('HTTP_REFERER')
+    product = Product.objects.get(id=product_id)
+    baskets = Basket.objects.filter(user = request.user, product = product)
 
+    if not baskets.exists(): #только для списков (результаты работы get и filter
+        Basket.objects.create(user=request.user, product=product, quantity=1)
+        return HttpResponseRedirect(current_page)
+    else:
+        basket = baskets.first()
+        basket.quantity += 1
+        basket.save()
+        return HttpResponseRedirect(current_page)
+
+@login_required(login_url='/users/login/') # декор закрывающий возможность использования функции basket_delete без входа под своим логином login_url='/users/login/' - страница на которую перенаправляеться пользователь при попытке использования basket_delete
+def basket_delete(request, id):
+    current_page = request.META.get('HTTP_REFERER')
+    basket = Basket.objects.get(id=id)
+    basket.delete()
+    return HttpResponseRedirect(current_page)
+
+
+
+
+
+#------------------------------------------for example------------------------------------------------------
 def test_context(request):
     context = {
         'title': 'store',
