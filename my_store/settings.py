@@ -130,3 +130,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')    # для работы с мед�
 
 AUTH_USER_MODEL = 'users.User' # после создания class User(AbstractUser): вносим изменения здесь и применяем миграции
                                #  в файле минраций в моделе пользователя (стандартной из коробки) появиться поле image = models.ImageField(upload_to='users_images', blank=True)
+
+#LOGIN_URL = '/users/login/'  - для использования @login_required(login_url='/users/login/') без параметра login_url

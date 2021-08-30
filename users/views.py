@@ -1,6 +1,9 @@
 from django.contrib import auth, messages
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+
+from products.models import Basket
 from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
 
 
@@ -45,7 +48,7 @@ def register(request):
         context = {'form':form}
         return render(request, 'users/register.html', context)
 
-
+@login_required(login_url='/users/login/') # декор закрывающий возможность использования функции def profile(request) без входа под своим логином login_url='/users/login/' - страница на которую перенаправляеться пользователь при попытке использования def profile(request)
 def profile(request):
     if request.method == 'POST':
         form = UserProfileForm(data = request.POST, files=request.FILES, instance=request.user) #instance - указывает какую сущность мы обновляем
@@ -54,13 +57,26 @@ def profile(request):
             return render(request, 'users/user_update.html')
         else:
             print(form.errors)
-            return render(request, 'users/profile.html', {'form':form})
+            context = {'form':form}
+            return render(request, 'users/profile.html', context)
 
     else:
 
         form = UserProfileForm(instance=request.user)
-        context = {'form':form}
-        return render(request, 'users/profile.html', context)
+    baskets = Basket.objects.filter(user=request.user)
+    total_quantity = 0
+    total_sum = 0
+    for basket in baskets:
+        total_quantity += basket.quantity
+        total_sum += basket.sum()
+
+    context = {'form':form,
+               'title': 'Store - Личный кабинет',
+               'baskets': baskets,
+               'total_quantity': total_quantity,
+               'total_sum': total_sum,}
+
+    return render(request, 'users/profile.html', context)
 
 
 def logout(request):
